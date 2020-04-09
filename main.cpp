@@ -15,34 +15,44 @@ int umain() {
             &&(HAL_GPIO_ReadPin(GPIOE, sw_num[2]) == GPIO_PIN_RESET)
             &&(HAL_GPIO_ReadPin(GPIOE, sw_num[3]) == GPIO_PIN_SET)
                 ){
-            if (k <= 7){
-                for (int z = 0; z <= k; z++){
-                    HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_SET);
+
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+
+                if (k <= 7){
+                    for (int z = 0; z <= k; z++){
+                        HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_SET);
+                    }
+                    for (int z = k+1; z <= 7; z++){
+                        HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_RESET);
+                    }
                 }
-                for (int z = k+1; z <= 7; z++){
-                    HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_RESET);
+                if (k > 7){
+                    for (int z = j; z <= 7; z++){
+                        HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_RESET);
+                    }
+                    for (int z = 0; z < j; z++){
+                        HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_SET);
+                    }
+                    j = j - 1;
                 }
-            }
-            if (k > 7){
-                for (int z = j; z <= 7; z++){
-                    HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_RESET);
+                HAL_Delay(delay);
+                k = k + 1;
+                if (j == 1){
+                    j = 7;
                 }
-                for (int z = 0; z < j; z++){
-                    HAL_GPIO_WritePin(GPIOD, leds_num[z], GPIO_PIN_SET);
+                if (k == 14){
+                    k = 0;
+                    HAL_GPIO_WritePin(GPIOD, leds_num[1], GPIO_PIN_RESET);
                 }
-                j = j - 1;
-            }
-            HAL_Delay(delay);
-            k = k + 1;
-            if (j == 1){
-                j = 7;
-            }
-            if (k == 14){
-                k = 0;
-                HAL_GPIO_WritePin(GPIOD, leds_num[1], GPIO_PIN_RESET);
-                //HAL_Delay(delay);
-            }
+
         }else{
+
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+
             for(int i = 0; i < 4; i++) {
                 GPIO_PinState state = HAL_GPIO_ReadPin(GPIOE, sw_num[i]);
                 HAL_GPIO_WritePin(GPIOD, leds_num[i], state);
